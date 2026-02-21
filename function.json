@@ -1,0 +1,111 @@
+{
+  "type": "vector.function",
+  "output_length": {
+    "$starlark": "len(input)"
+  },
+  "input_split": {
+    "$starlark": "[[item] for item in input]"
+  },
+  "input_merge": {
+    "$starlark": "[x for sublist in input for x in sublist]"
+  },
+  "input_schema": {
+    "type": "array",
+    "description": "An array of cat pictures to rank by clarity of moment — how precisely and completely each image captures its subject.",
+    "minItems": 2,
+    "items": {
+      "type": "image",
+      "description": "A cat picture to evaluate for clarity of moment."
+    }
+  },
+  "tasks": [
+    {
+      "type": "vector.completion",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Show me a cat picture where the cat's expression and emotion are completely unmistakable. I want to look at it and instantly know exactly what the cat is feeling or doing — no ambiguity, no guessing. The face, eyes, posture, and body language should all tell one coherent, vivid story that arrives without any effort. Whether the cat is mid-blep, regally still, startled, or playful doesn't matter — what matters is that the emotional signal is loud, clear, and immediate. Show me the most emotionally readable cat picture."
+            }
+          ]
+        }
+      ],
+      "responses": {
+        "$starlark": "[[item] for item in input]"
+      },
+      "output": {
+        "$jmespath": "output.scores"
+      }
+    },
+    {
+      "type": "vector.completion",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "I'm curating a collection of cat photography and I need images where the composition is impeccable."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": "I'd be happy to help you find the best-composed cat photographs. What specifically are you looking for in terms of composition?"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "The framing should direct my eye straight to the cat and the specific detail that matters most in that moment. No visual clutter, no competing elements pulling attention away from the subject. The background should let the cat pop. The angle and cropping should emphasize the key gesture or expression. I want an image that feels like a confident, authoritative visual statement — where there is zero ambiguity about what I'm meant to look at. It shouldn't require me to mentally crop or search for the point of the image. Show me the cat picture with the strongest compositional focus."
+            }
+          ]
+        }
+      ],
+      "responses": {
+        "$starlark": "[[item] for item in input]"
+      },
+      "output": {
+        "$jmespath": "output.scores"
+      }
+    },
+    {
+      "type": "vector.completion",
+      "messages": [
+        {
+          "role": "system",
+          "content": [
+            {
+              "type": "text",
+              "text": "You are selecting cat photographs based purely on temporal precision — how perfectly the moment was captured. The ideal image is taken at exactly the right instant. This takes two equally valid forms. The first is the frozen miracle: an action caught at its absolute apex, such as a paw frozen mid-swat, a cat suspended at the top of a leap, a tongue caught at the perfect angle of a blep, or the precise instant of contact between a paw and a falling object. These images feel impossible and reveal detail the human eye would normally miss. The second form is eternal stillness: a cat so completely and naturally at rest that the image feels timeless, as though the moment has no beginning or end. In both cases, the moment is captured at the point of maximum intensity and minimum ambiguity. Reject images that feel approximate — taken a beat too early when the action hasn't cohered, or a beat too late when it has begun to dissolve. Also reject images where blur or motion artifacts prevent the moment from fully registering."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Show me the cat picture with the most perfect timing."
+            }
+          ]
+        }
+      ],
+      "responses": {
+        "$starlark": "[[item] for item in input]"
+      },
+      "output": {
+        "$jmespath": "output.scores"
+      }
+    }
+  ],
+  "description": "Ranks cat pictures by clarity of moment — how precisely each image captures its subject as the definitive version of that instant. Evaluates emotional readability, compositional focus, and temporal precision. The best images are sharp and distilled; the worst are approximate, cluttered, or mistimed."
+}
